@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learning Path - KMS</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #F4F7FB;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #2E3A59;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .container { display: flex; min-height: 100vh; }
+
+    /* ===== Sidebar (Desktop: ซ้าย) ===== */
+    .sidebar {
+      width: 70px;
+      background: linear-gradient(180deg, #4A89C8 0%, #2E75B6 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      gap: 10px;
+      position: fixed;
+      height: 100vh;
+      left: 0;
+      top: 0;
+      z-index: 100;
+    }
+    .sidebar-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.85);
+      font-size: 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sidebar-icon:hover,
+    .sidebar-icon.active {
+      background-color: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+
+    /* ===== Main ===== */
+    .main-content {
+      flex: 1;
+      margin-left: 70px;
+      width: calc(100% - 70px);
+    }
+
+    /* ✅ HEADER STANDARD */
+    .header {
+      background: linear-gradient(135deg, #4A89C8 0%, #2E75B6 100%);
+      padding: 60px 40px;
+      min-height: 240px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(74, 137, 200, 0.25);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .header h1 {
+      font-size: 42px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .header p {
+      font-size: 18px;
+      color: rgba(255,255,255,0.95);
+      line-height: 1.7;
+      max-width: 900px;          /* ขยายให้คอมได้ยาวขึ้น */
+      margin: 0 auto;
+      white-space: normal;       /* มือถือ/จอแคบ: ตกบรรทัดปกติ */
+    }
+
+    /* ✅ จอคอม: ไม่ตกบรรทัด (ต่อไปเลย) */
+    @media (min-width: 1024px){
+      .header p{
+        max-width: none;
+        white-space: nowrap;     /* ไม่ให้ตกบรรทัด */
+        overflow: hidden;        /* กันทะลุ */
+        text-overflow: ellipsis; /* ถ้ายาวเกินจริงๆ ให้ ... */
+      }
+    }
+
+    /* ===== Intro Bar ===== */
+    .intro {
+      padding: 18px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .intro-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(46,58,89,0.08);
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+    .intro-left {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .intro-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #E6F0FA;
+      color: #2E75B6;
+      font-size: 18px;
+      flex: 0 0 auto;
+    }
+    .intro-text h2 {
+      font-size: 16px;
+      margin: 0 0 4px 0;
+      font-weight: 700;
+      color: #2E3A59;
+    }
+    .intro-text p {
+      font-size: 13px;
+      margin: 0;
+      color: #6B7A90;
+      line-height: 1.6;
+    }
+    .intro-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .pill {
+      font-size: 12px;
+      padding: 8px 10px;
+      background: #F4F7FB;
+      border: 1px solid #E0E6EF;
+      border-radius: 999px;
+      color: #455a64;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    /* ===== Process Cards ===== */
+    .section {
+      padding: 0 24px 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .process-card {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(46,58,89,0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid rgba(74,137,200,0.16);
+      position: relative;
+    }
+    .process-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 30px rgba(74,137,200,0.18);
+    }
+
+    .process-img {
+      width: 100%;
+      height: 175px;
+      object-fit: cover;
+      background: #EEF3F8;
+      display: block;
+    }
+
+    .process-body {
+      padding: 14px 14px 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #E6F0FA;
+      color: #2E75B6;
+    }
+
+    .mini {
+      font-size: 12px;
+      color: #6B7A90;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .process-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+      color: #2E3A59;
+    }
+
+    .process-desc {
+      font-size: 13px;
+      margin: 0;
+      color: #6B7A90;
+      line-height: 1.5;
+      min-height: 40px;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: none;
+      background: #4A89C8;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .cta:hover { background: #2E75B6; }
+
+    .hint {
+      font-size: 12px;
+      color: #8A98AD;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1200px) {
+      .process-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column !important; }
+
+      .sidebar {
+        width: 100% !important;
+        height: 60px !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        padding: 10px !important;
+        gap: 12px !important;
+      }
+
+      .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+
+      .header { padding: 40px 20px; min-height: 170px; }
+      .header h1 { font-size: 28px; }
+      .header p { font-size: 15px; white-space: normal; }
+
+      .intro, .section { padding-left: 16px; padding-right: 16px; }
+      .intro-card { grid-template-columns: 1fr; }
+      .intro-right { justify-content: flex-start; }
+
+      .process-grid { grid-template-columns: 1fr; gap: 14px; }
+      .process-img { height: 160px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <a class="sidebar-icon" data-page="index" href="index.html"><i class="fas fa-home"></i></a>
+      <a class="sidebar-icon" data-page="kb" href="knowledge-base.html"><i class="fas fa-book"></i></a>
+      <a class="sidebar-icon active" data-page="lp" href="learning-path.html"><i class="fas fa-graduation-cap"></i></a>
+      <a class="sidebar-icon" data-page="quiz" href="quiz.html"><i class="fas fa-clipboard-check"></i></a>
+      <a class="sidebar-icon" data-page="share" href="share-experience.html"><i class="fas fa-comments"></i></a>
+      <a class="sidebar-icon logout" href="#"><i class="fas fa-sign-out-alt"></i></a>
+    </nav>
+
+    <main class="main-content">
+      <header class="header">
+        <h1>Learning Path</h1>
+        <p>
+          เรียนรู้ “วิธีทำที่ถูกต้องตาม WI” แบบสั้น กระชับ + จำจุดวิกฤต (Critical Point) + รู้ว่าถ้าพลาดจะกระทบอะไร
+        </p>
+      </header>
+
+      <section class="intro">
+        <div class="intro-card">
+          <div class="intro-left">
+            <div class="intro-badge"><i class="fa-solid fa-route"></i></div>
+            <div class="intro-text">
+              <h2>เลือกกระบวนการที่ต้องเรียน</h2>
+              <p>เหมาะกับพนักงานใหม่ / พนักงานเวียน / คนที่ไม่ได้อยู่ประจำ Process นั้น ๆ</p>
+            </div>
+          </div>
+          <div class="intro-right">
+            <div class="pill"><i class="fa-solid fa-check"></i> ทำงานตาม WI ได้</div>
+            <div class="pill"><i class="fa-solid fa-triangle-exclamation"></i> รู้ Critical Point</div>
+            <div class="pill"><i class="fa-solid fa-ban"></i> ไม่ทำผิดซ้ำ</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="process-grid" id="processGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const PROCESS_LIST = [
+      { id: 1, name: "กระบวนการผสมเปียก", img: "assets/p1_mixer.jpg", desc: "เทวัตถุดิบตามลำดับ + ชั่งน้ำให้ถูก + ทำสารละลาย/ Binder + เช็ค Wet Mass พร้อมส่งต่อ" },
+      { id: 2, name: "กระบวนการแร่งเปียก", img: "assets/p2_sieve.jpg", desc: "เช็คตะแกรง/เครื่องแร่ง + แร่งให้เป็นเส้นสม่ำเสมอ + เกลี่ยลงถาดให้ทั่วถึง" },
+      { id: 3, name: "กระบวนการอบลมร้อน", img: "assets/p3_dryer.jpg", desc: "วอร์มเครื่อง + ตรวจอุณหภูมิ + เข้าอบตามเวลา/อุณหภูมิ + สุ่มตรวจ LOD" },
+      { id: 4, name: "กระบวนการแร่งแห้ง", img: "assets/p4_dry_sieve.jpg", desc: "เตรียม Dry Granule + ตรวจตะแกรง 2.5mm + ทุบหยาบ/แร่ง + แร่งผงช่วยไหล" },
+      { id: 5, name: "กระบวนการผสมแห้ง", img: "assets/p5_mixer.jpg", desc: "ติดตั้งกรวย + ใส่ผงยา + ใส่ Mg stearate/Talc + เดินเครื่องตามเวลา WI" },
+      { id: 6, name: "กระบวนการตอกเม็ดยา", img: "assets/p6_tablet_press.jpg", desc: "ติดตั้ง Hopper/feeder + ตรวจเครื่อง + ตั้งค่า + ตรวจความหนา/น้ำหนัก/ความแข็ง/ความกร่อน" },
+      { id: 7, name: "กระบวนการบรรจุซอง", img: "assets/p7_packaging.jpg", desc: "ติดตั้งม้วนซอง + ใส่ lot + ตั้งจานหมุน/หลุมยา + ทดสอบเดินเครื่อง + ตรวจคุณภาพซอง" }
+    ];
+
+    function goProcess(processId) {
+      window.location.href = `learning-process.html?process=${processId}`;
+    }
+
+    function cardTemplate(p) {
+      return `
+        <div class="process-card" onclick="goProcess(${p.id})" role="button" aria-label="ไปที่ Process ${p.id}">
+          <img class="process-img"
+               src="${p.img}"
+               alt="Process ${p.id} ${p.name}"
+               onerror="this.src='https://via.placeholder.com/900x500?text=Upload+Image+to+assets'">
+          <div class="process-body">
+            <div class="top-row">
+              <div class="tag"><i class="fa-solid fa-gear"></i> Process ${p.id}</div>
+              <div class="mini"><i class="fa-regular fa-image"></i> รูปเครื่อง</div>
+            </div>
+
+            <h3 class="process-title">${p.name}</h3>
+            <p class="process-desc">${p.desc}</p>
+
+            <div class="btn-row">
+              <button class="cta" type="button" onclick="event.stopPropagation(); goProcess(${p.id});">
+                เริ่มเรียน <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <div class="hint">กดเพื่อดู Step แบบ Roadmap</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const grid = document.getElementById("processGrid");
+    grid.innerHTML = PROCESS_LIST.map(cardTemplate).join("");
+  </script>
+
+  <script src="Js"></script>
+</body>
+</html>

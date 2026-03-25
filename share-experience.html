@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Experience - KMS</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ✅ ธีมหลักให้เข้าชุด */
+    body{
+      font-family:'Sarabun',sans-serif;
+      background:#F4F7FB;
+      min-height:100vh;
+      overflow-x:hidden;
+      color:#2E3A59;
+    }
+    .container { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 70px;
+      background: linear-gradient(180deg, #4A89C8 0%, #2E75B6 100%);
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 20px; gap: 10px;
+      position: fixed; left: 0; top: 0;
+      height: 100vh; z-index: 10;
+    }
+    .sidebar-icon {
+      width: 50px; height: 50px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.85); font-size: 20px;
+      border-radius: 12px; cursor: pointer;
+      transition: all 0.2s ease; text-decoration: none;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
+    }
+    .sidebar-icon:hover, .sidebar-icon.active { background-color: rgba(255,255,255,0.18); color: #fff; }
+
+    .main-content { flex: 1; margin-left: 70px; width: calc(100% - 70px); }
+
+    /* ✅ HEADER STANDARD (เหมือนหน้าอื่น) */
+    .header{
+      background:linear-gradient(135deg,#4A89C8 0%,#2E75B6 100%);
+      padding:60px 40px;
+      min-height:240px;
+      text-align:center;
+      box-shadow:0 4px 15px rgba(74,137,200,.25);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+    }
+    .header h1{
+      color:#fff;
+      font-size:42px;
+      font-weight:700;
+      margin-bottom:15px;
+      letter-spacing:1px;
+      text-shadow:0 2px 4px rgba(0,0,0,.2);
+    }
+    .header p{
+      color:rgba(255,255,255,.95);
+      font-size:18px;
+      max-width:780px;
+      margin:0 auto;
+      line-height:1.7;
+    }
+
+    .wrap { padding: 22px 40px 40px; }
+
+    .form-card {
+      max-width: 980px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(46,58,89,0.06);
+      overflow: hidden;
+      border:1px solid rgba(74,137,200,0.10);
+    }
+
+    .form-top {
+      padding: 18px 20px;
+      border-bottom: 1px solid #eef2f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #E6F0FA;
+      color: #2E75B6;
+      font-weight: 800;
+    }
+    .hint { font-size: 12px; color: #7f8c8d; line-height: 1.4; }
+
+    form { padding: 20px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 14px; font-weight: 700; color: #2c3e50; }
+
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 2px solid #e6e6e6;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: 0.2s ease;
+      background: #fff;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: #4A89C8; }
+
+    .uploader {
+      border: 2px dashed #cfe1f4;
+      border-radius: 14px;
+      padding: 14px;
+      background: #f7fbff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .uploader-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s ease;
+      text-decoration: none;
+      justify-content: center;
+    }
+    .btn-primary { background: #4A89C8; color: #fff; }
+    .btn-primary:hover { background: #2E75B6; }
+    .btn-ghost { background: #E6F0FA; color: #2E75B6; }
+    .btn-ghost:hover { background: #d8e9ff; }
+    .btn-danger { background: #ffe8ea; color: #b3261e; }
+    .btn-danger:hover { background: #ffd7db; }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .thumb {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #eaeaea;
+      position: relative;
+      aspect-ratio: 4 / 3;
+    }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb button {
+      position: absolute;
+      top: 6px; right: 6px;
+      width: 30px; height: 30px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      display: none;
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .status.show { display: block; }
+    .status.info { background: #E6F0FA; color: #1f4f7a; border: 1px solid #cfe1f4; }
+    .status.ok { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+    .status.err { background: #ffebee; color: #b71c1c; border: 1px solid #ffcdd2; }
+
+    @media (max-width: 980px) {
+      .wrap { padding: 18px 24px 30px; }
+    }
+
+    @media (max-width: 900px) {
+      .container { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        justify-content: center;
+        padding: 10px;
+        position: fixed;
+        top: 0; left: 0;
+        z-index: 1000;
+      }
+      .main-content { margin-left: 0; width: 100%; margin-top:60px; }
+    }
+
+    @media (max-width: 768px) {
+      /* ✅ header standard มือถือ */
+      .header{padding:40px 20px;min-height:170px}
+      .header h1{font-size:28px}
+      .header p{font-size:15px}
+
+      .wrap { padding: 16px; }
+      form { padding: 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .thumbs { grid-template-columns: repeat(2, 1fr); }
+      .actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <a class="sidebar-icon" data-page="index" href="index.html"><i class="fas fa-home"></i></a>
+      <a class="sidebar-icon" data-page="kb" href="knowledge-base.html"><i class="fas fa-book"></i></a>
+      <a class="sidebar-icon" data-page="lp" href="learning-path.html"><i class="fas fa-graduation-cap"></i></a>
+      <a class="sidebar-icon" data-page="quiz" href="quiz.html"><i class="fas fa-clipboard-check"></i></a>
+      <a class="sidebar-icon active" data-page="share" href="share-experience.html"><i class="fas fa-comments"></i></a>
+      <a class="sidebar-icon logout" href="#"><i class="fas fa-sign-out-alt"></i></a>
+    </nav>
+
+    <main class="main-content">
+      <header class="header">
+        <h1>Share Experience</h1>
+        <p>บันทึกปัญหาและวิธีแก้ไข เพื่อเพิ่มความรู้ให้ทีม </p>
+      </header>
+
+      <div class="wrap">
+        <section class="form-card">
+          <div class="form-top">
+            <div class="badge"><i class="fa-solid fa-file-pen"></i> แบบฟอร์มบันทึกประสบการณ์</div>
+          </div>
+
+          <!-- ✅ แก้: ใส่ novalidate เพื่อให้เราเป็นคนคุมข้อความแจ้งเตือน -->
+          <form id="shareForm" novalidate>
+            <div class="grid">
+
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="problemTitle">1) ชื่อปัญหา</label>
+                <input id="problemTitle" type="text" required placeholder="พิมพ์ชื่อปัญหา" />
+              </div>
+
+              <div class="field">
+                <label for="reporterName">2) ชื่อผู้กรอก</label>
+                <input id="reporterName" type="text" required placeholder="ชื่อ-นามสกุล" />
+              </div>
+
+              <div class="field">
+                <label for="product">3) ชื่อผลิตภัณฑ์</label>
+                <select id="product" required>
+                  <option value="">-- เลือกผลิตภัณฑ์ --</option>
+                  <option value="ยาอมมะแว้ง รสบ๊วย">ยาอมมะแว้ง รสบ๊วย</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="process">4) เลือก Process</label>
+                <select id="process" required>
+                  <option value="">-- เลือกกระบวนการ --</option>
+                  <option value="1"> 1.ผสมเปียก</option>
+                  <option value="2"> 2.แร่งเปียก</option>
+                  <option value="3"> 3.อบลมร้อน</option>
+                  <option value="4"> 4.แร่งแห้ง</option>
+                  <option value="5"> 5.ผสมแห้ง</option>
+                  <option value="6"> 6.ตอกเม็ดยา</option>
+                  <option value="7"> 7.บรรจุซอง</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="docType">5) ประเภทเอกสาร</label>
+                <select id="docType" required>
+                  <option value="">-- เลือกประเภทเอกสาร --</option>
+                  <option value="OPL">OPL</option>
+                  <option value="WI">WI</option>
+                  <option value="Experience">Share Experience</option>
+                </select>
+              </div>
+
+              <div class="field" style="grid-column: 1 / -1;">
+                <label>6) เพิ่มรูป (สูงสุด 1–4 รูป)</label>
+                <div class="uploader">
+                  <div class="uploader-row">
+                    <div class="hint" id="imgHint">ยังไม่เลือกรูป</div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                      <button type="button" class="btn btn-ghost" id="btnPick">
+                        <i class="fa-regular fa-image"></i> เลือกรูป
+                      </button>
+
+                      <button type="button" class="btn btn-ghost" id="btnCamera">
+                        <i class="fa-solid fa-camera"></i> ถ่ายรูป
+                      </button>
+
+                      <button type="button" class="btn btn-danger" id="btnClearImages">
+                        <i class="fa-solid fa-trash"></i> ล้างรูป
+                      </button>
+                    </div>
+                  </div>
+
+                  <input id="images" type="file" accept="image/*" multiple hidden />
+                  <input id="camera" type="file" accept="image/*" capture="environment" hidden />
+
+                  <div class="thumbs" id="thumbs"></div>
+                </div>
+              </div>
+
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="problemDetail">7) รายละเอียดของปัญหา</label>
+                <textarea id="problemDetail" required placeholder="อธิบายรายละเอียดของปัญหา"></textarea>
+              </div>
+
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="solution">8) วิธีการแก้ไข</label>
+                <textarea id="solution" required placeholder="อธิบายวิธีการแก้ไข"></textarea>
+              </div>
+
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="result">9) ผลจากการแก้ไข (Result)</label>
+                <textarea id="result" placeholder="เช่น ลดของเสีย / เครื่องเดินนิ่ง / ผ่าน QC ฯลฯ"></textarea>
+              </div>
+
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-primary" type="submit" id="btnSubmit">
+                <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
+              </button>
+              <button class="btn btn-ghost" type="button" id="btnReset">
+                <i class="fa-solid fa-rotate-right"></i> ล้างฟอร์ม
+              </button>
+            </div>
+
+            <div class="status" id="statusBox"></div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwMRbnqSLTmmI4wofmNfZ5YPFGSiqg__rZUgyDlTTR03JchnQXgUj7DKDvzS4-QBmJrvw/exec";
+
+    const form = document.getElementById('shareForm');
+    const imagesInput = document.getElementById('images');
+    const cameraInput = document.getElementById('camera');
+
+    const btnPick = document.getElementById('btnPick');
+    const btnCamera = document.getElementById('btnCamera');
+    const btnClearImages = document.getElementById('btnClearImages');
+    const thumbs = document.getElementById('thumbs');
+    const imgHint = document.getElementById('imgHint');
+    const btnReset = document.getElementById('btnReset');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const statusBox = document.getElementById('statusBox');
+
+    let selectedFiles = [];
+
+    function setStatus(type, msg) {
+      statusBox.className = 'status show ' + type;
+      statusBox.innerHTML = msg;
+    }
+    function clearStatus() {
+      statusBox.className = 'status';
+      statusBox.innerHTML = '';
+    }
+
+    function renderThumbs() {
+      thumbs.innerHTML = '';
+      if (selectedFiles.length === 0) {
+        imgHint.textContent = 'ยังไม่เลือกรูป';
+        return;
+      }
+      imgHint.textContent = `เลือกรูปแล้ว ${selectedFiles.length} รูป`;
+
+      selectedFiles.forEach((file, idx) => {
+        const url = URL.createObjectURL(file);
+        const div = document.createElement('div');
+        div.className = 'thumb';
+        div.innerHTML = `
+          <img src="${url}" alt="img-${idx+1}">
+          <button type="button" title="ลบรูปนี้"><i class="fa-solid fa-xmark"></i></button>
+        `;
+        div.querySelector('button').addEventListener('click', () => {
+          selectedFiles.splice(idx, 1);
+          renderThumbs();
+        });
+        thumbs.appendChild(div);
+      });
+    }
+
+    function mergeFiles(files) {
+      const merged = selectedFiles.concat(files);
+      if (merged.length > 4) {
+        selectedFiles = merged.slice(0, 4);
+        setStatus('err', 'แนบรูปได้สูงสุด 4 รูปเท่านั้น');
+      } else {
+        selectedFiles = merged;
+        clearStatus();
+      }
+      renderThumbs();
+    }
+
+    btnPick.addEventListener('click', () => imagesInput.click());
+    btnCamera.addEventListener('click', () => cameraInput.click());
+
+    imagesInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      mergeFiles(files);
+      imagesInput.value = '';
+    });
+
+    cameraInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      mergeFiles(files);
+      cameraInput.value = '';
+    });
+
+    btnClearImages.addEventListener('click', () => {
+      selectedFiles = [];
+      imagesInput.value = '';
+      cameraInput.value = '';
+      renderThumbs();
+      clearStatus();
+    });
+
+    btnReset.addEventListener('click', () => {
+      form.reset();
+      selectedFiles = [];
+      imagesInput.value = '';
+      cameraInput.value = '';
+      renderThumbs();
+      clearStatus();
+    });
+
+    function fileToBase64Object(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = String(reader.result || "");
+          const commaIndex = result.indexOf(",");
+          if (commaIndex === -1) return reject(new Error("รูปไม่ถูกต้อง (base64)"));
+          const base64 = result.slice(commaIndex + 1);
+          resolve({
+            name: file.name || `image_${Date.now()}.jpg`,
+            type: file.type || "image/jpeg",
+            data: base64
+          });
+        };
+        reader.onerror = () => reject(new Error("อ่านไฟล์รูปไม่สำเร็จ"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ✅✅✅ แก้: ทำให้ข้อความ required เป็น "โปรดกรอกข้อมูลในช่องนี้" ✅✅✅
+    const REQUIRED_MSG = 'โปรดกรอกข้อมูลในช่องนี้';
+
+    function applyRequiredMessages() {
+      const requiredEls = form.querySelectorAll('[required]');
+      requiredEls.forEach(el => {
+        el.setCustomValidity('');
+        const isEmpty = (el.value == null) || String(el.value).trim() === '';
+        if (isEmpty) el.setCustomValidity(REQUIRED_MSG);
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearStatus();
+
+      // ✅ ตั้งข้อความก่อน reportValidity ทุกครั้ง
+      applyRequiredMessages();
+
+      if (!form.checkValidity()) {
+        form.reportValidity(); // จะโชว์ข้อความที่เราตั้งไว้
+        return;
+      }
+
+      if (selectedFiles.length < 1) {
+        setStatus('err', 'กรุณาแนบรูปอย่างน้อย 1 รูป (สูงสุด 4 รูป)');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      setStatus('info', '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่งข้อมูลไปบันทึก...');
+
+      try {
+        const images = await Promise.all(selectedFiles.map(fileToBase64Object));
+
+        const payload = {
+          problemTitle: document.getElementById('problemTitle').value.trim(),
+          reporterName: document.getElementById('reporterName').value.trim(),
+          product: document.getElementById('product').value,
+          process: document.getElementById('process').value,
+          docType: document.getElementById('docType').value,
+          description: document.getElementById('problemDetail').value.trim(),
+          how: document.getElementById('solution').value.trim(),
+          result: document.getElementById('result').value.trim(),
+          images
+        };
+
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const raw = await res.text();
+        let data;
+        try { data = JSON.parse(raw); }
+        catch { throw new Error("ตอบกลับไม่ใช่ JSON (เช็ค Deploy Web App/URL/สิทธิ์ Anyone)"); }
+
+        if (!data.ok) throw new Error(data.error || "บันทึกไม่สำเร็จ");
+
+        const pdfLink = data.pdfUrl
+          ? `<a href="${data.pdfUrl}" target="_blank" rel="noopener">เปิด PDF</a>`
+          : "(ไม่พบลิงก์ PDF)";
+
+        setStatus('ok', `✅ บันทึกสำเร็จ<br>${pdfLink}`);
+
+        form.reset();
+        selectedFiles = [];
+        renderThumbs();
+
+      } catch (err) {
+        setStatus('err', `❌ ${err.message}`);
+      } finally {
+        btnSubmit.disabled = false;
+      }
+    });
+
+    renderThumbs();
+  </script>
+
+  <script src="Js"></script>
+</body>
+</html>
